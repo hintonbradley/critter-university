@@ -1,0 +1,184 @@
+*********************
+** SET UP DEV ENVI **
+*********************
+
+1. Create an account at Local by Flywheel (localwp.com) and download the software
+
+2. Add the software to your Applications folder and open it on your computer.
+
+3. Choose a name for your project and select the 'Preferred' environment
+
+4. Finish setting up your account
+
+5. When your dev environment has been set up, click the 'Start site' button if your app isn't started yet, and go to your site to view.
+
+6. Add the tag /wp-admin to view your WordPress dashboard for your project. (example: critter-university.local/wp-admin)
+
+7. Note that files for your projects are kept under your root directory /Local Sites  (example: jamesbradley/Local Sites)
+
+*****************************
+** DEVELOPING YOUR PROJECT **
+*****************************
+
+1. In your project folder go to the themes directory: 
+<root>/Local Sites/<project_name>/app/public/wp-content/themes
+
+2. Delete the other themes folders and create your own folder to hold your content for your project. (Note: keep the index.php file in the folder)
+themes >
+    critters-univiersity.theme (folder)
+    index.php (file)
+
+3. In the new folder you just created, create an index.php file and a style.css file inside of it.
+    critters-university.theme >
+        index.php
+        style.css
+    index.php
+
+4. In the style.css file, add the following comment:
+/*
+    Theme Name: Critters university
+    Author: James B.
+    Version: 1.0
+*/
+
+5. In the index.php file in your critters-university folder, add the following code:
+    This is from the critters-unviersity index.php page
+
+6. Add a png image file to the critters-university.theme directory and name it screenshot.png.
+
+7. Go to your Wordpress project admin page and view your themes. You should see the above information listed as one of your possible themes. Click 'Activate theme'. You can now view the new index.php file when you go to your homepage. (http://critters-university.local/)
+
+**************************
+** DISPLAY DATA ON SITE **
+**************************
+
+1. In the Wordpress dashboard, click on 'Settings' and then on 'General'
+
+2. Change the 'Tagline' of the site.
+
+3. In the index file inside your theme directory, add the following PHP code to display that info on your page:
+    <h1>
+        <?php bloginfo('name'); ?>
+    </h1>
+    <h3>
+        <?php bloginfo('description'); ?>
+    </h3>
+
+4. Refresh your page and view the data displayed on your site.
+
+**************************
+** DISPLAY POSTS ON SITE **
+**************************
+
+1. To view all your posts, add the PHP code below to the theme index file to loop through all posts and display them on the page:
+    <?php
+        while(have_posts()) {
+            the_post(); ?>
+            <h3>
+                <a href="<?php the_permalink(); ?>"></a>
+                <?php the_title(); ?>
+            </h3>
+            <p>
+                <?php the_content(); ?>
+            </p>
+            <hr>
+        <?php }
+    ?>
+
+2. If you want to view only ONE post or go to that single post to view, you need to add a single.php file in your theme folder.
+    critters-university.theme >
+        ...
+        index.php
+        single.php
+        ...
+
+3. In that new single.php file, add the code below. This will prevent a link from showing as the title if you view one post at a time. (Note: you can edit and change the html in this file so the view is different.)
+    <?php
+        while(have_posts()) {
+            the_post(); ?>
+            <h3>
+                <?php the_title(); ?>
+            </h3>
+            <p>
+                <?php the_content(); ?>
+            </p>
+        <?php }
+    ?>
+
+*************************
+** CREATING A NEW PAGE **
+*************************
+
+1. In the Wordpress dashboard, click the 'Pages' tab and then click 'Add New'
+
+2. Add a placeholder title and placeholder text.
+
+3. Click 'Publish', and then click the permalink that is displayed in it's place to view the page.
+
+4. Create a new file called page.php in your theme directory and add the code below to it:
+    <?php
+        while(have_posts()) {
+            the_post(); ?>
+            <h1>This is a Page, and not posts</h1>
+            <h3>
+                <?php the_title(); ?>
+            </h3>
+            <p>
+                <?php the_content(); ?>
+            </p>
+        <?php }
+    ?>
+
+5. View page online by clicking the permalink in the Wordpress dashboard
+
+******************************
+** Adding Headers / Footers **
+******************************
+
+1. In the theme directory, create a file called header.php and write some placeholder code in it: 
+    <h1>This is a header</h1>
+
+2. Do the same thing with footer.php
+
+3. In the pages and index files, add the code below to bring in the headers and footers:
+...
+<?php get_header(); ?>
+...
+<?php get_footer(); ?>
+
+4. Clean up your php ending and beginning codes on next and previous lines if needed.
+
+5. In the header.php file, replace the placeholder text with the beginning of a Document html file. We add this code to created the beginnings of our html since the header is always placed at the top of each page. (Note: we will close the body and html tags in the footer.php file.)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+6. In the footer.php file, (you guessed it), add the closeing body and html tags to close out the opening html file you created in the header.
+...
+</body>
+</html>
+
+**********************
+** ADD CSS & SCRIPTS**
+**********************
+
+1. For our styling files, in the header.php file, in the head tag, add the following function call:
+    <?php wp_head(); ?>
+
+2. Create a file in the themes folder called functions.php and add the following code:
+    <?php 
+    function addCustomStyling () {
+        wp_enqueue_style('university_main_styles', get_stylesheet_uri());
+    }
+    add_action('wp_enqueue_scripts','addCustomStyling');
+
+3. For our scripts files, we add the following code in the footer.php file: (Note: this will add the black admin bar at the top of the page if you are in admin mode.)
+...
+<?php wp_footer(); ?>
+</body>
+</html>
